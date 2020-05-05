@@ -1,0 +1,1 @@
+export {ReCaptchaGuard} from './recaptcha.guard';

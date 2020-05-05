@@ -1,0 +1,25 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {
+    },
+    "rules": {
+        "no-console": false,
+        "max-classes-per-file": false,
+        "no-trailing-whitespace": false,
+        "semicolon": true,
+        "class-name": true,
+        "arrow-return-shorthand": true,
+        "await-promise": true,
+        "arrow-parens": true,
+        "import-spacing": true,
+        "label-position": true,
+        "no-eval": false,
+        "use-isnan": true,
+        "variable-name": false,
+        "triple-equals": true
+    },
+    "rulesDirectory": []
+}
