@@ -19,7 +19,8 @@
         "no-eval": false,
         "use-isnan": true,
         "variable-name": false,
-        "triple-equals": true
+        "triple-equals": true,
+        "no-angle-bracket-type-assertion": false
     },
     "rulesDirectory": []
 }

@@ -1,4 +1,4 @@
-import {Document, Schema, model, Model} from 'mongoose';
+import {Document, model, Model, Schema} from 'mongoose';
 import {CryptoService, MongooseUtils} from '../../';
 
 export enum Permissions {

@@ -5,18 +5,18 @@ enum BusinessType {
 }
 
 enum USER_ROLE {
-    USER,
+    STAFF,
     MANAGER,
     OWNER
 }
 
 interface User {
-    v: boolean; // verified
+    ip: string[];
     role: USER_ROLE;
-    first: string;
-    last: string;
     email: string;
     pass: string;
+    first: string;
+    last: string;
 }
 
 interface IVendor {

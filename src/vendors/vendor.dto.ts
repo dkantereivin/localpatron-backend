@@ -1,6 +1,4 @@
 import {
-    IsAlpha,
-    IsAlphanumeric,
     IsAscii,
     IsEmail,
     IsLatitude,
@@ -125,6 +123,7 @@ export class VendorDto {
 }
 
 export class FullVendorDto extends VendorDto {
+    @IsOptional()
     ext: FullVendorExternalsObject;
 
     @IsNotEmpty()

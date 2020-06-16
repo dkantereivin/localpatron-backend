@@ -1,13 +1,25 @@
 import {Injectable} from '@nestjs/common';
 import {ConfigService} from '@nestjs/config';
+import {MongooseConnectionOptions, MongoUrlOptions} from 'connect-mongo';
 
 @Injectable()
 export class AppConfigService {
     constructor(private configService: ConfigService) {
     }
 
+    get session() {
+        return {
+            secret: this.getVar('SESSION_SECRET'),
+            maxAge: parseInt(this.getVar('SESSION_TTL'), 10)
+        };
+    }
+
     get isProduction(): boolean {
         return this.getVar('NODE_ENV') === 'production';
+    }
+
+    get saltRounds(): number {
+        return parseInt(this.getVar('PSWD_SALT_ROUNDS'), 10);
     }
 
     get isHTTPS(): boolean {
@@ -47,7 +59,12 @@ export class AppConfigService {
         return {
             url: this.getVar('DB_URL'),
             username: this.getVar('DB_USER'),
-            password: this.getVar('DB_PASS')
+            password: this.getVar('DB_PASS'),
+            options: {
+                useUnifiedTopology: true,
+                useNewUrlParser: true,
+                useCreateIndex: true
+            }
         };
     }
 
@@ -88,6 +105,7 @@ interface DBOptions {
     url: string;
     username: string;
     password: string;
+    options: any;
 }
 
 export interface DiscordOptions {

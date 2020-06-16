@@ -1,3 +1,3 @@
-export {VendorModel} from './vendor.schema';
-export {IVendorModel} from './vendor.types';
-export {VendorDto, FullVendorDto} from './vendor.dto';
+export * from './vendor.schema';
+export * from './vendor.types';
+export * from './vendor.dto';

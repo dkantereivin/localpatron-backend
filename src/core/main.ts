@@ -16,11 +16,7 @@ async function runServer() {
 
     const config: AppConfigService = app.get(AppConfigService);
 
-    await mongoose.connect(config.db.url, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-        useCreateIndex: true
-        })
+    await mongoose.connect(config.db.url, config.db.options)
         .then(() => console.log('Connected to the DB.'))
         .catch((err: Error) => {throw err;});
 

@@ -1,8 +1,9 @@
-import {Body, Param, Controller, Get, Put, HttpException, HttpStatus, Ip, UseGuards} from '@nestjs/common';
-import {VendorModel, IVendorModel, VendorDto, FullVendorDto} from './';
-import {IsAdmin, DiscordService, Permissions} from '../common';
-import { IVendor } from './vendor.types';
-import {VendorService} from './Vendor.service';
+import {Body, Controller, Get, HttpException, HttpStatus, Ip, Param, Put} from '@nestjs/common';
+import {FullVendorDto, IExtVendorModel, IVendorModel, VendorDto, VendorModel} from './';
+import {DiscordService, IsAdmin, Permissions} from '../common';
+import {IVendor} from './vendor.types';
+import {VendorService} from './vendor.service';
+import {create} from 'domain';
 
 /**
  * RESTful Controller for all vendor operations.
@@ -33,17 +34,25 @@ export class VendorController {
     // @UseGuards(ReCaptchaGuard)
     @Put('community-vendor')
     async putCommunityVendor(@Body() createVendorDto: VendorDto, @Ip() ip: string) {
+        if (await VendorModel.countDocuments({'place.pid': createVendorDto.place.pid}) > 0)
+            throw new HttpException('Already Exists', HttpStatus.CONFLICT);
         const vendor: IVendorModel = await VendorModel.create({
+            ...createVendorDto,
             uname: createVendorDto.name,
             author: {
                 ip,
                 loc: createVendorDto.loc
-            },
-            ...createVendorDto
+            }
         }).catch(() => {
             throw new HttpException('Error on DB Insertion', HttpStatus.INTERNAL_SERVER_ERROR);
         });
         await this.discordService.sendToVerificationQueue(vendor);
+        return {uname: vendor.uname, vid: vendor.vid};
+    }
+
+    @Put('full-vendor')
+    async putFullVendor(@Body() createVendorDto: FullVendorDto, @Ip() ip: string) {
+        const vendor: IExtVendorModel = await this.vendorService.createExternalVendor(createVendorDto, ip);
         return {uname: vendor.uname, vid: vendor.vid};
     }
 }

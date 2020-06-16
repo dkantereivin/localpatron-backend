@@ -1,5 +1,4 @@
-import {Controller, Body, Post, UseGuards, Param} from '@nestjs/common';
-import {ReCaptchaGuard} from '../common/guards';
+import {Body, Controller, Post} from '@nestjs/common';
 import {ContactFormDto} from './contact.dto';
 import {DiscordService} from '../common/discord';
 

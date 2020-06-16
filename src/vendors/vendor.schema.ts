@@ -1,13 +1,12 @@
 import {model, Schema, SchemaOptions} from 'mongoose';
 import {CryptoService, MongooseUtils, UtilsService} from '../common';
-import {BusinessType, IVendorModel} from './vendor.types';
+import {BusinessType, IExtVendorModel, IVendorModel} from './vendor.types';
 
 const options: SchemaOptions = {
-    minimize: false,
     strict: true,
     selectPopulatedPaths: false,
     timestamps: {
-        createdAt: 'crAt',
+        createdAt: 'author.crAt',
         updatedAt: 'upAt'
     }
 };
@@ -87,4 +86,50 @@ const VendorSchema = new Schema({
     }
 }, options);
 
+const UserSchema = new Schema({
+    ip: [{...MongooseUtils.Str, select: false}],
+    role: {
+        ...MongooseUtils.Num,
+        select: false
+    },
+    email: {
+        ...MongooseUtils.Str,
+        select: false,
+        lowercase: true,
+        unique: true
+    },
+    pass: {
+        ...MongooseUtils.Str,
+        maxlength: 1024,
+        select: false
+    },
+    first: {
+        ...MongooseUtils.Str,
+        select: false
+    },
+    last: {
+        ...MongooseUtils.Str,
+        select: false
+    }
+});
+
+const ExternalVendorSchema = new Schema({
+    profile: {
+        description: {
+            ...MongooseUtils.Str,
+            maxlength: 200,
+            required: false,
+            default: ''
+        }
+    },
+    users: [UserSchema]
+});
+
 export const VendorModel = model<IVendorModel>('VendorModel', VendorSchema, 'vendors');
+export const ExtVendorModel = VendorModel.discriminator<IExtVendorModel>('ExtVendorModel', ExternalVendorSchema, 'EX');
+
+export const PUBLIC_SELECT: string =
+    '-author.crAt -upAt -__v -_id' +
+    '-users.ip -users.first -users.last -users._id -users.email -users.pass -users.role';
+export const VENDOR_ADMIN_SELECT: string = '+author.ip +author.loc.lat +author.loc.lng ' +
+    '+users.ip +users.first +users.last +users._id +users.email +users.pass +users.role';

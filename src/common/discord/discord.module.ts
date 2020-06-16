@@ -1,4 +1,4 @@
-import {HttpModule, HttpService, Module} from '@nestjs/common';
+import {HttpModule, Module} from '@nestjs/common';
 import {DiscordService} from './discord.service';
 
 @Module({
